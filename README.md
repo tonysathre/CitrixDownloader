@@ -16,3 +16,5 @@
 ```
 
 6. Add a row to [Downloads.csv](Downloads.csv) with the DLNumber and FileName from the Citrix download URL. The Name column is arbitrary and can be anything, but I'd recommend using what Citrix calls them for clarity.
+
+Credit to [Ryan Butler](https://github.com/ryancbutler) for the [original code](https://github.com/ryancbutler/Citrix/tree/master/XenDesktop/AutoDownload).
