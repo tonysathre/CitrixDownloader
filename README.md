@@ -1,4 +1,5 @@
 # CitrixDownloader
+PowerShell script to automate the download of binaries from Citrix.com
 
 ## Updating [Downloads.csv](Downloads.csv)
 1. Login to your Citrix.com account.
