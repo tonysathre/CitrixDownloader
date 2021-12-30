@@ -51,12 +51,13 @@ catch {
 
 }
 
-$Csv = Import-Csv (Join-Path $PSScriptRoot Downloads.csv) -ErrorAction Stop  
-$DLExe = ($Csv | Where-Object DLNumber -eq $DLNumber).Filename
-$DLName = ($Csv | Where-Object DLNumber -eq $DLNumber).Name
+$Csv         = Import-Csv (Join-Path $PSScriptRoot Downloads.csv) -ErrorAction Stop  
+$DLExe       = ($Csv | Where-Object DLNumber -eq $DLNumber).Filename
+$DLName      = ($Csv | Where-Object DLNumber -eq $DLNumber).Name
 $DownloadUrl = "https://secureportal.citrix.com/Licensing/Downloads/UnrestrictedDL.aspx?DLID=${DLNumber}&URL=https://Downloads.citrix.com/${DLNumber}/${DLExe}"
-$Download = Invoke-WebRequest -Uri $DownloadUrl -WebSession $WebSession -UseBasicParsing -Method GET
-$OutFile = Join-Path $OutputFolder $DLExe
+$Download    = Invoke-WebRequest -Uri $DownloadUrl -WebSession $WebSession -UseBasicParsing -Method GET
+$OutFile     = Join-Path $OutputFolder $DLExe
+
 $WebForm = @{ 
 	"chkAccept"            = "on"
 	"clbAccept"            = "Accept"
