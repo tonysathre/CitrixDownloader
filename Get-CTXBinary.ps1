@@ -13,7 +13,7 @@
 .PARAMETER CitrixPassword
   Citrix.com password
 .EXAMPLE
-  Get-CTXBinary -DLNumber 19427 -DLExe -CitrixUserName mycitrixusername -CitrixPassword mycitrixpassword -OutputFolder C:\temp
+  Get-CTXBinary -DLNumber 19427 -CitrixUserName mycitrixusername -CitrixPassword mycitrixpassword -OutputFolder C:\temp
 #>
 
 Param(
