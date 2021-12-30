@@ -1,13 +1,13 @@
 # Credit to Ryan Butler
 <#
 .SYNOPSIS
-  Downloads a Citrix VDA installer or ISO from Citrix.com utilizing authentication
+  Downloads a binary from Citrix.com utilizing authentication
 .DESCRIPTION
-  Downloads a Citrix VDA installer or ISO from Citrix.com utilizing authentication
+  Downloads a binary from Citrix.com utilizing authentication
 .PARAMETER DLNumber
   Number assigned to binary (see Downloads.csv)
 .PARAMETER OutputFolder
-  Path to store Downloaded file (C:\temp)
+  Path to store downloaded file (C:\temp)
 .PARAMETER CitrixUserName
   Citrix.com username
 .PARAMETER CitrixPassword
