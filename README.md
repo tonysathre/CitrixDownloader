@@ -1,6 +1,6 @@
 # CitrixDownloader
 
-## Updating [Downloads](Downloads.csv)
+## Updating [Downloads.csv](Downloads.csv)
 1. Login to your Citrix.com account.
 2. Browse to the [Citrix Downloads](https://www.citrix.com/downloads/) page and find the download page for the file you'd like to add.
 3. Right-click the `Download File` button and choose Inspect. This will open the page in the browser DevTools.
@@ -15,4 +15,4 @@
 </a>
 ```
 
-6. Add a row to [Downloads](Downloads.csv) with the DLNumber and FileName from the Citrix download URL. The Name column is arbitrary and can be anything, but I'd recommend using what Citrix calls them for clarity.
+6. Add a row to [Downloads.csv](Downloads.csv) with the DLNumber and FileName from the Citrix download URL. The Name column is arbitrary and can be anything, but I'd recommend using what Citrix calls them for clarity.
