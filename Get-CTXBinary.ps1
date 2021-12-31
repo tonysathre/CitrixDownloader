@@ -34,13 +34,13 @@
 [CmdletBinding(DefaultParameterSetName = 'ProxyUseDefaultCredentials')]
 Param(
 	[Parameter(Mandatory)]
-	[int]$DLNumber,
+	[int[]]$DLNumber,
 
 	[Parameter(Mandatory)]
-	[string]$FileName,
+	[string[]]$FileName,
 
 	[Parameter(Mandatory)]
-	[string]$Name,
+	[string[]]$Name,
 
 	[Parameter(Mandatory)]
 	[string]$OutputFolder,
@@ -61,69 +61,87 @@ Param(
 	[switch]$ProxyUseDefaultCredentials
 )
 
-[Net.ServicePointManager]::SecurityProtocol = "Tls12, Tls13"
-$ProgressPreference = 'SilentlyContinue'
+BEGIN {
+	[Net.ServicePointManager]::SecurityProtocol = "Tls12, Tls13"
+	$ProgressPreference = 'SilentlyContinue'
 
-if ($PSBoundParameters.ContainsKey('Proxy')) {
-	$PSDefaultParameterValues = @{
-		"Invoke-WebRequest:Proxy" = $Proxy
+	if ($PSBoundParameters.ContainsKey('Proxy')) {
+		$PSDefaultParameterValues = @{
+			"Invoke-WebRequest:Proxy" = $Proxy
+		}
+	}
+	
+	if ($PSBoundParameters.ContainsKey('ProxyCredential')) {
+		$PSDefaultParameterValues.Add(
+			"Invoke-WebRequest:ProxyCredential", $ProxyCredential
+		)
+	}
+	
+	if ($PSBoundParameters.ContainsKey('ProxyUseDefaultCredentials')) {
+		$PSDefaultParameterValues.Add(
+			"Invoke-WebRequest:ProxyUseDefaultCredentials", $ProxyUseDefaultCredentials
+		)
+	}
+
+	$Downloads = New-Object System.Collections.ArrayList
+	# Create array of pscustomobjects so we can iterate over them
+	for ($i -eq 0; $i -lt $DLNumber.Length; $i++) {
+		$Downloads.Add([pscustomobject][ordered]@{
+			'DLNumber' = $DLNumber[$i - 1]
+			'FileName' = $FileName[$i - 1]
+			'Name'     = $Name[$i - 1]
+		}) | Out-Null
+	}
+
+	#Initialize Session
+	Invoke-WebRequest "https://identity.citrix.com/Utility/STS/Sign-In?ReturnUrl=%2fUtility%2fSTS%2fsaml20%2fpost-binding-response" -SessionVariable WebSession -UseBasicParsing | Out-Null
+
+	#Set Form
+	$Form = @{
+		"persistent" = "on"
+		"userName"   = $CitrixUserName
+		"password"   = $CitrixPassword
+	}
+
+	#Authenticate
+	try {
+		Invoke-WebRequest -Uri ("https://identity.citrix.com/Utility/STS/Sign-In?ReturnUrl=%2fUtility%2fSTS%2fsaml20%2fpost-binding-response") -WebSession $WebSession -Method POST -Body $Form -ContentType "application/x-www-form-urlencoded" -UseBasicParsing -ErrorAction Stop | Out-Null
+	}
+	catch {
+		if ($_.Exception.Response.StatusCode.Value__ -eq 500) {
+			Write-Verbose "500 returned on auth. Ignoring"
+			Write-Verbose $_.Exception.Response
+			Write-Verbose $_.Exception.Message
+		}
+		else {
+			throw $_
+		}
 	}
 }
 
-if ($PSBoundParameters.ContainsKey('ProxyCredential')) {
-	$PSDefaultParameterValues.Add(
-		"Invoke-WebRequest:ProxyCredential", $ProxyCredential
-	)
-}
+PROCESS {
+	foreach ($DL in $Downloads.GetEnumerator()) {
+		$DownloadUrl = "https://secureportal.citrix.com/Licensing/Downloads/UnrestrictedDL.aspx?DLID=$(($DL.DLNumber))&URL=https://downloads.citrix.com/$(($DL.DLNumber))/$(($DL.FileName))"
+		$Download    = Invoke-WebRequest -Uri $DownloadUrl -WebSession $WebSession -UseBasicParsing -Method GET
+		$OutFile     = Join-Path $OutputFolder $DL.FileName
 
-if ($PSBoundParameters.ContainsKey('ProxyUseDefaultCredentials')) {
-	$PSDefaultParameterValues.Add(
-		"Invoke-WebRequest:ProxyUseDefaultCredentials", $ProxyUseDefaultCredentials
-	)
-}
+		$WebForm = @{
+			"chkAccept"            = "on"
+			"clbAccept"            = "Accept"
+			"__VIEWSTATEGENERATOR" = ($Download.InputFields | Where-Object { $_.id -eq "__VIEWSTATEGENERATOR" }).value
+			"__VIEWSTATE"          = ($Download.InputFields | Where-Object { $_.id -eq "__VIEWSTATE" }).value
+			"__EVENTVALIDATION"    = ($Download.InputFields | Where-Object { $_.id -eq "__EVENTVALIDATION" }).value
+		}
 
-#Initialize Session
-Invoke-WebRequest "https://identity.citrix.com/Utility/STS/Sign-In?ReturnUrl=%2fUtility%2fSTS%2fsaml20%2fpost-binding-response" -SessionVariable WebSession -UseBasicParsing | Out-Null
-
-#Set Form
-$Form = @{
-	"persistent" = "on"
-	"userName"   = $CitrixUserName
-	"password"   = $CitrixPassword
-}
-
-#Authenticate
-try {
-	Invoke-WebRequest -Uri ("https://identity.citrix.com/Utility/STS/Sign-In?ReturnUrl=%2fUtility%2fSTS%2fsaml20%2fpost-binding-response") -WebSession $WebSession -Method POST -Body $Form -ContentType "application/x-www-form-urlencoded" -UseBasicParsing -ErrorAction Stop | Out-Null
-}
-catch {
-	if ($_.Exception.Response.StatusCode.Value__ -eq 500) {
-		Write-Verbose "500 returned on auth. Ignoring"
-		Write-Verbose $_.Exception.Response
-		Write-Verbose $_.Exception.Message
-	}
-	else {
-		throw $_
+		#Download
+		"Downloading '{0}' to {1}" -f $DL.Name, $OutFile
+		try {
+			Invoke-WebRequest -Uri $DownloadUrl -WebSession $WebSession -Method POST -Body $WebForm -ContentType "application/x-www-form-urlencoded" -UseBasicParsing -OutFile $OutFile
+			"Download completed successfully"
+		} catch {
+			throw $_
+		}
 	}
 }
 
-$DownloadUrl = "https://secureportal.citrix.com/Licensing/Downloads/UnrestrictedDL.aspx?DLID=${DLNumber}&URL=https://downloads.citrix.com/${DLNumber}/${FileName}"
-$Download    = Invoke-WebRequest -Uri $DownloadUrl -WebSession $WebSession -UseBasicParsing -Method GET
-$OutFile     = Join-Path $OutputFolder $FileName
-
-$WebForm = @{
-	"chkAccept"            = "on"
-	"clbAccept"            = "Accept"
-	"__VIEWSTATEGENERATOR" = ($Download.InputFields | Where-Object { $_.id -eq "__VIEWSTATEGENERATOR" }).value
-	"__VIEWSTATE"          = ($Download.InputFields | Where-Object { $_.id -eq "__VIEWSTATE" }).value
-	"__EVENTVALIDATION"    = ($Download.InputFields | Where-Object { $_.id -eq "__EVENTVALIDATION" }).value
-}
-
-#Download
-"Downloading {0} to {1}" -f $Name, $OutFile
-try {
-	Invoke-WebRequest -Uri $DownloadUrl -WebSession $WebSession -Method POST -Body $WebForm -ContentType "application/x-www-form-urlencoded" -UseBasicParsing -OutFile $OutFile
-	"Download completed successfully"
-} catch {
-	throw $_
-}
+END {}
