@@ -28,9 +28,8 @@ SYNOPSIS
 
 
 SYNTAX
-    C:\CitrixDownloader\Get-CTXBinary.ps1 [-DLNumber] <Int32> [-FileName] <String> [-Name] <String> [-OutputFolder] <String>
-    [-CitrixUserName] <String> [-CitrixPassword] <String> [[-Proxy] <Uri>] [[-ProxyCredential] <PSCredential>] [-ProxyUseDefaultCredentials]
-    [<CommonParameters>]
+    .\Get-CTXBinary.ps1 [-DLNumber] <Int32> [-FileName] <String> [-Name] <String> [-OutputFolder] <String> [-CitrixUserName] <String> [-Citr
+    ixPassword] <String> [[-Proxy] <Uri>] [[-ProxyCredential] <PSCredential>] [-ProxyUseDefaultCredentials] [<CommonParameters>]
 
 
 DESCRIPTION
@@ -39,7 +38,7 @@ DESCRIPTION
 
 PARAMETERS
     -DLNumber <Int32>
-        ID assigned to binary by Citrix (see Downloads.csv for examples)
+        ID assigned to binary (see Downloads.csv)
 
         Required?                    true
         Position?                    1
@@ -120,7 +119,7 @@ PARAMETERS
         This cmdlet supports the common parameters: Verbose, Debug,
         ErrorAction, ErrorVariable, WarningAction, WarningVariable,
         OutBuffer, PipelineVariable, and OutVariable. For more information, see
-        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216).
+        about_CommonParameters (https://go.microsoft.com/fwlink/?LinkID=113216).
 
 INPUTS
 
@@ -128,19 +127,18 @@ OUTPUTS
 
     -------------------------- EXAMPLE 1 --------------------------
 
-    PS C:\>Get-CTXBinary -DLNumber 19427 -CitrixUserName mycitrixusername -CitrixPassword mycitrixpassword -OutputFolder C:\temp
+    PS > Get-CTXBinary -DLNumber 19427 -CitrixUserName mycitrixusername -CitrixPassword mycitrixpassword -OutputFolder C:\temp
 
 
     -------------------------- EXAMPLE 2 --------------------------
 
-    PS C:\>Get-CTXBinary -DLNumber 19427 -CitrixUserName mycitrixusername -CitrixPassword mycitrixpassword -OutputFolder C:\temp -Proxy
-    http://proxy.domain.com:8080 -ProxyUseDefaultCredentials
+    PS > Get-CTXBinary -DLNumber 19427 -CitrixUserName mycitrixusername -CitrixPassword mycitrixpassword -OutputFolder C:\temp -Proxy http://proxy.domain.com:8080 -ProxyU
+    seDefaultCredentials
 
 
     -------------------------- EXAMPLE 3 --------------------------
 
-    PS C:\>$ProxyCredential = Get-Credential Domain\UserName
-
-    Get-CTXBinary -DLNumber 19427 -CitrixUserName mycitrixusername -CitrixPassword mycitrixpassword -OutputFolder C:\temp -Proxy
-    http://proxy.domain.com:8080 -ProxyCredential $ProxyCredential
+    PS > $ProxyCredential = Get-Credential Domain\UserName
+    Get-CTXBinary -DLNumber 19427 -CitrixUserName mycitrixusername -CitrixPassword mycitrixpassword -OutputFolder C:\temp -Proxy http://proxy.domain.com:8080 -ProxyCreden
+    tial $ProxyCredential
 ```
