@@ -8,10 +8,10 @@ Credit to [Ryan Butler](https://github.com/ryancbutler) for the [original code](
 The [Downloads.csv](Downloads.csv) file is just for reference and is not required by the script.
 
 1. Login to your Citrix.com account.
-2. Browse to the [Citrix Downloads](https://www.citrix.com/downloads/) page and find the download page for the file you'd like to add.
+2. Browse to the [Citrix Downloads](https://www.citrix.com/downloads/) page and find the download page for the file you'd like to download.
 3. Right-click the `Download File` button and choose Inspect. This will open the page in the browser DevTools.
    * Inspect might be called something else in other browsers. Inspect is what it's called in Edge and Chrome.
-   * Alternatively you can just download the file and get the URL from the Downloads page in your browser.
+   * Alternatively you can just download the file and get the URL from the Downloads page in your browser. This is probably easier.
 4. The DLNumber will be after `http://downloads.citrix.com/` in the hyperlink. Should be a 5 digit number such as `20116`.
 5. The FileName will be after the DLNumber in the URL. For example the following is what to look for in the DevTools. This is for `Multi-session OS Virtual Delivery Agent 2112` VDA.
    
