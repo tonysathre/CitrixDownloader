@@ -1,5 +1,3 @@
-#Requires -Version 5.1
-#Requires -PSEdition Desktop
 
 # Currently does not support Powershell Core
 # Credit to Ryan Butler for the original code
