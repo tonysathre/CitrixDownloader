@@ -1,7 +1,13 @@
 # CitrixDownloader
-PowerShell script to automate the download of binaries from Citrix.com
+PowerShell script to automate the download of binaries from Citrix.com.
 
 Credit to [Ryan Butler](https://github.com/ryancbutler) for the [original code](https://github.com/ryancbutler/Citrix/blob/master/XenDesktop/AutoDownload/Helpers/Get-CTXBinary.ps1).
+
+## Requirements
+* PowerShell 3+ or PowerShell Core 7+
+  * Only tested on PowerShell Core 7.2.1 but older versions may work
+* Windows or Linux
+  * MacOS may work but I don't have a Mac to test it
 
 ## Getting DLNumber and FileName
 
@@ -132,13 +138,11 @@ OUTPUTS
 
     -------------------------- EXAMPLE 2 --------------------------
 
-    PS > Get-CTXBinary -DLNumber 19427 -CitrixUserName mycitrixusername -CitrixPassword mycitrixpassword -OutputFolder C:\temp -Proxy http://proxy.domain.com:8080 -ProxyU
-    seDefaultCredentials
+    PS > Get-CTXBinary -DLNumber 19427 -CitrixUserName mycitrixusername -CitrixPassword mycitrixpassword -OutputFolder C:\temp -Proxy http://proxy.domain.com:8080 -ProxyUseDefaultCredentials
 
 
     -------------------------- EXAMPLE 3 --------------------------
 
     PS > $ProxyCredential = Get-Credential Domain\UserName
-    Get-CTXBinary -DLNumber 19427 -CitrixUserName mycitrixusername -CitrixPassword mycitrixpassword -OutputFolder C:\temp -Proxy http://proxy.domain.com:8080 -ProxyCreden
-    tial $ProxyCredential
+    Get-CTXBinary -DLNumber 19427 -CitrixUserName mycitrixusername -CitrixPassword mycitrixpassword -OutputFolder C:\temp -Proxy http://proxy.domain.com:8080 -ProxyCredential $ProxyCredential
 ```
