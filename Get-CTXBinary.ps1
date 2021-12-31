@@ -1,31 +1,92 @@
-# Credit to Ryan Butler
+#Requires -Version 5.1
+#Requires -PSEdition Desktop
+
+# Currently does not support Powershell Core
+# Credit to Ryan Butler for the original code
+# https://github.com/ryancbutler/Citrix/blob/master/XenDesktop/AutoDownload/Helpers/Get-CTXBinary.ps1
+
 <#
 .SYNOPSIS
-  Downloads a binary from Citrix.com utilizing authentication
+  Downloads a binary from Citrix.com
 .DESCRIPTION
-  Downloads a binary from Citrix.com utilizing authentication
+  Downloads a binary from Citrix.com
 .PARAMETER DLNumber
-  Number assigned to binary (see Downloads.csv)
+  ID assigned to binary (see Downloads.csv)
 .PARAMETER OutputFolder
   Path to store downloaded file (C:\temp)
 .PARAMETER CitrixUserName
   Citrix.com username
 .PARAMETER CitrixPassword
   Citrix.com password
+.PARAMETER Proxy
+  Specifies a proxy server for the request, rather than connecting directly to the Internet resource. Enter the URI of a network proxy server.
+.PARAMETER ProxyCredentials
+  Specifies a user account that has permission to use the proxy server that is specified by the Proxy parameter. The default is the current user.
+.PARAMETER ProxyUseDefaultCredentials
+  Indicates that the script uses the credentials of the current user to access the proxy server that is specified by the Proxy parameter.
 .EXAMPLE
   Get-CTXBinary -DLNumber 19427 -CitrixUserName mycitrixusername -CitrixPassword mycitrixpassword -OutputFolder C:\temp
+.EXAMPLE
+  Get-CTXBinary -DLNumber 19427 -CitrixUserName mycitrixusername -CitrixPassword mycitrixpassword -OutputFolder C:\temp -Proxy http://proxy.domain.com:8080 -ProxyUseDefaultCredentials
+.EXAMPLE
+  $ProxyCredential = Get-Credential Domain\UserName
+  Get-CTXBinary -DLNumber 19427 -CitrixUserName mycitrixusername -CitrixPassword mycitrixpassword -OutputFolder C:\temp -Proxy http://proxy.domain.com:8080 -ProxyCredential $ProxyCredential
+.LINK
+  https://github.com/tonysathre/CitrixDownloader
 #>
 
+[CmdletBinding()]
 Param(
-	[Parameter(Mandatory)]$DLNumber,
-	[Parameter(Mandatory)]$OutputFolder,
-	[Parameter(Mandatory)]$CitrixUserName,
-	[Parameter(Mandatory)]$CitrixPassword
+	[Parameter(Mandatory)]
+	[int]$DLNumber,
+
+	[Parameter(Mandatory)]
+	[string]$FileName,
+
+	[Parameter(Mandatory)]
+	[string]$Name,
+
+	[Parameter(Mandatory)]
+	[string]$OutputFolder,
+
+	[Parameter(Mandatory)]
+	[string]$CitrixUserName,
+
+	[Parameter(Mandatory)]
+	[string]$CitrixPassword,
+
+	[Parameter(Mandatory = $false)]
+	[uri]$Proxy,
+
+	[Parameter(Mandatory = $false)]
+	[pscredential]$ProxyCredential,
+
+	[Parameter(Mandatory = $false)]
+	[switch]$ProxyUseDefaultCredentials
 )
 
+[Net.ServicePointManager]::SecurityProtocol = "Tls12, Tls13"
 $ProgressPreference = 'SilentlyContinue'
 
-#Initialize Session 
+if ($PSBoundParameters.ContainsKey('Proxy')) {
+	$PSDefaultParameterValues = @{
+		"Invoke-WebRequest:Proxy" = $Proxy
+	}
+}
+
+if ($PSBoundParameters.ContainsKey('ProxyCredential')) {
+	$PSDefaultParameterValues.Add(
+		"Invoke-WebRequest:ProxyCredential", $ProxyCredential
+	)
+}
+
+if ($PSBoundParameters.ContainsKey('ProxyUseDefaultCredentials')) {
+	$PSDefaultParameterValues.Add(
+		"Invoke-WebRequest:ProxyUseDefaultCredentials", $ProxyUseDefaultCredentials
+	)
+}
+
+#Initialize Session
 Invoke-WebRequest "https://identity.citrix.com/Utility/STS/Sign-In?ReturnUrl=%2fUtility%2fSTS%2fsaml20%2fpost-binding-response" -SessionVariable WebSession -UseBasicParsing | Out-Null
 
 #Set Form
@@ -48,17 +109,13 @@ catch {
 	else {
 		throw $_
 	}
-
 }
 
-$Csv         = Import-Csv (Join-Path $PSScriptRoot Downloads.csv) -ErrorAction Stop  
-$DLExe       = ($Csv | Where-Object DLNumber -eq $DLNumber).Filename
-$DLName      = ($Csv | Where-Object DLNumber -eq $DLNumber).Name
-$DownloadUrl = "https://secureportal.citrix.com/Licensing/Downloads/UnrestrictedDL.aspx?DLID=${DLNumber}&URL=https://Downloads.citrix.com/${DLNumber}/${DLExe}"
+$DownloadUrl = "https://secureportal.citrix.com/Licensing/Downloads/UnrestrictedDL.aspx?DLID=${DLNumber}&URL=https://downloads.citrix.com/${DLNumber}/${FileName}"
 $Download    = Invoke-WebRequest -Uri $DownloadUrl -WebSession $WebSession -UseBasicParsing -Method GET
-$OutFile     = Join-Path $OutputFolder $DLExe
+$OutFile     = Join-Path $OutputFolder $FileName
 
-$WebForm = @{ 
+$WebForm = @{
 	"chkAccept"            = "on"
 	"clbAccept"            = "Accept"
 	"__VIEWSTATEGENERATOR" = ($Download.InputFields | Where-Object { $_.id -eq "__VIEWSTATEGENERATOR" }).value
@@ -67,7 +124,7 @@ $WebForm = @{
 }
 
 #Download
-"Downloading {0} to {1}" -f $DLName, $OutFile
+"Downloading {0} to {1}" -f $Name, $OutFile
 try {
 	Invoke-WebRequest -Uri $DownloadUrl -WebSession $WebSession -Method POST -Body $WebForm -ContentType "application/x-www-form-urlencoded" -UseBasicParsing -OutFile $OutFile
 	"Download completed successfully"
