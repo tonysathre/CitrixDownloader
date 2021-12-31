@@ -1,5 +1,3 @@
-
-# Currently does not support Powershell Core
 # Credit to Ryan Butler for the original code
 # https://github.com/ryancbutler/Citrix/blob/master/XenDesktop/AutoDownload/Helpers/Get-CTXBinary.ps1
 
@@ -9,7 +7,7 @@
 .DESCRIPTION
   Downloads a binary from Citrix.com
 .PARAMETER DLNumber
-  ID assigned to binary (see Downloads.csv)
+  ID assigned to binary by Citrix (see Downloads.csv for examples)
 .PARAMETER OutputFolder
   Path to store downloaded file (C:\temp)
 .PARAMETER CitrixUserName
@@ -33,7 +31,7 @@
   https://github.com/tonysathre/CitrixDownloader
 #>
 
-[CmdletBinding()]
+[CmdletBinding(DefaultParameterSetName = 'ProxyUseDefaultCredentials')]
 Param(
 	[Parameter(Mandatory)]
 	[int]$DLNumber,
@@ -56,10 +54,10 @@ Param(
 	[Parameter(Mandatory = $false)]
 	[uri]$Proxy,
 
-	[Parameter(Mandatory = $false)]
+	[Parameter(Mandatory = $false, ParameterSetName = 'ProxyCredential')]
 	[pscredential]$ProxyCredential,
 
-	[Parameter(Mandatory = $false)]
+	[Parameter(Mandatory = $false, ParameterSetName = 'ProxyUseDefaultCredentials')]
 	[switch]$ProxyUseDefaultCredentials
 )
 
