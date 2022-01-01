@@ -1,13 +1,15 @@
 # CitrixDownloader
 PowerShell script to automate the download of binaries from Citrix.com.
 
+Supports downloading multiple files at once.
+
 Credit to [Ryan Butler](https://github.com/ryancbutler) for the [original code](https://github.com/ryancbutler/Citrix/blob/master/XenDesktop/AutoDownload/Helpers/Get-CTXBinary.ps1).
 
 ## Requirements
 * PowerShell 3+ or PowerShell Core 7+
   * Only tested on PowerShell Core 7.2.1 but older versions may work
 * Windows or Linux
-  * MacOS may work but I don't have a Mac to test it
+  * MacOS probably works but I don't have a Mac to test it
 
 ## Getting DLNumber and FileName
 
