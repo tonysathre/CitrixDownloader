@@ -32,7 +32,7 @@ The [Downloads.csv](Downloads.csv) file is just for reference and is not require
 ## Help
 ```
 NAME
-    C:\Users\Tony\git\CitrixDownloader\Get-CTXBinary.ps1
+    Get-CTXBinary.ps1
     
 SYNOPSIS
     Downloads a binary from Citrix.com
