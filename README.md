@@ -29,120 +29,135 @@ The [Downloads.csv](Downloads.csv) file is just for reference and is not require
 
 ## Help
 ```
+NAME
+    C:\Users\Tony\git\CitrixDownloader\Get-CTXBinary.ps1
+    
 SYNOPSIS
     Downloads a binary from Citrix.com
-
-
+    
+    
 SYNTAX
-    .\Get-CTXBinary.ps1 [-DLNumber] <Int32> [-FileName] <String> [-Name] <String> [-OutputFolder] <String> [-CitrixUserName] <String> [-Citr
-    ixPassword] <String> [[-Proxy] <Uri>] [[-ProxyCredential] <PSCredential>] [-ProxyUseDefaultCredentials] [<CommonParameters>]
-
-
+    C:\Users\Tony\git\CitrixDownloader\Get-CTXBinary.ps1 -DLNumber <Int32[]> -FileName <String[]> -Name <String[]> -OutputFolder <String> -CitrixUserName <String> -CitrixPassword <String> [-Proxy <Uri>] 
+    [-ProxyUseDefaultCredentials] [<CommonParameters>]
+    
+    C:\Users\Tony\git\CitrixDownloader\Get-CTXBinary.ps1 -DLNumber <Int32[]> -FileName <String[]> -Name <String[]> -OutputFolder <String> -CitrixUserName <String> -CitrixPassword <String> [-Proxy <Uri>] 
+    [-ProxyCredential <PSCredential>] [<CommonParameters>]
+    
+    
 DESCRIPTION
     Downloads a binary from Citrix.com
-
+    
 
 PARAMETERS
-    -DLNumber <Int32>
-        ID assigned to binary (see Downloads.csv)
-
+    -DLNumber <Int32[]>
+        ID assigned to binary by Citrix (see Downloads.csv for examples)
+        
         Required?                    true
-        Position?                    1
-        Default value                0
+        Position?                    named
+        Default value                
         Accept pipeline input?       false
         Accept wildcard characters?  false
-
-    -FileName <String>
-
+        
+    -FileName <String[]>
+        
         Required?                    true
-        Position?                    2
-        Default value
+        Position?                    named
+        Default value                
         Accept pipeline input?       false
         Accept wildcard characters?  false
-
-    -Name <String>
-
+        
+    -Name <String[]>
+        
         Required?                    true
-        Position?                    3
-        Default value
+        Position?                    named
+        Default value                
         Accept pipeline input?       false
         Accept wildcard characters?  false
-
+        
     -OutputFolder <String>
         Path to store downloaded file (C:\temp)
-
+        
         Required?                    true
-        Position?                    4
-        Default value
+        Position?                    named
+        Default value                
         Accept pipeline input?       false
         Accept wildcard characters?  false
-
+        
     -CitrixUserName <String>
         Citrix.com username
-
+        
         Required?                    true
-        Position?                    5
-        Default value
+        Position?                    named
+        Default value                
         Accept pipeline input?       false
         Accept wildcard characters?  false
-
+        
     -CitrixPassword <String>
         Citrix.com password
-
+        
         Required?                    true
-        Position?                    6
-        Default value
+        Position?                    named
+        Default value                
         Accept pipeline input?       false
         Accept wildcard characters?  false
-
+        
     -Proxy <Uri>
         Specifies a proxy server for the request, rather than connecting directly to the Internet resource. Enter the URI of a network proxy server.
-
+        
         Required?                    false
-        Position?                    7
-        Default value
+        Position?                    named
+        Default value                
         Accept pipeline input?       false
         Accept wildcard characters?  false
-
+        
     -ProxyCredential <PSCredential>
-
+        
         Required?                    false
-        Position?                    8
-        Default value
+        Position?                    named
+        Default value                
         Accept pipeline input?       false
         Accept wildcard characters?  false
-
+        
     -ProxyUseDefaultCredentials [<SwitchParameter>]
         Indicates that the script uses the credentials of the current user to access the proxy server that is specified by the Proxy parameter.
-
+        
         Required?                    false
         Position?                    named
         Default value                False
         Accept pipeline input?       false
         Accept wildcard characters?  false
-
+        
     <CommonParameters>
         This cmdlet supports the common parameters: Verbose, Debug,
         ErrorAction, ErrorVariable, WarningAction, WarningVariable,
-        OutBuffer, PipelineVariable, and OutVariable. For more information, see
-        about_CommonParameters (https://go.microsoft.com/fwlink/?LinkID=113216).
-
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see 
+        about_CommonParameters (https:/go.microsoft.com/fwlink/?LinkID=113216). 
+    
 INPUTS
-
+    
 OUTPUTS
-
+    
     -------------------------- EXAMPLE 1 --------------------------
-
-    PS > Get-CTXBinary -DLNumber 19427 -CitrixUserName mycitrixusername -CitrixPassword mycitrixpassword -OutputFolder C:\temp
-
-
+    
+    PS C:\>Get-CTXBinary -DLNumber 19427 -CitrixUserName mycitrixusername -CitrixPassword mycitrixpassword -OutputFolder C:\temp
+    
+    
     -------------------------- EXAMPLE 2 --------------------------
-
-    PS > Get-CTXBinary -DLNumber 19427 -CitrixUserName mycitrixusername -CitrixPassword mycitrixpassword -OutputFolder C:\temp -Proxy http://proxy.domain.com:8080 -ProxyUseDefaultCredentials
-
-
+    
+    PS C:\>Get-CTXBinary -DLNumber 19427 -CitrixUserName mycitrixusername -CitrixPassword mycitrixpassword -OutputFolder C:\temp -Proxy http://proxy.domain.com:8080 -ProxyUseDefaultCredentials
+    
+    
     -------------------------- EXAMPLE 3 --------------------------
-
-    PS > $ProxyCredential = Get-Credential Domain\UserName
+    
+    PS C:\>$ProxyCredential = Get-Credential Domain\UserName
+    
     Get-CTXBinary -DLNumber 19427 -CitrixUserName mycitrixusername -CitrixPassword mycitrixpassword -OutputFolder C:\temp -Proxy http://proxy.domain.com:8080 -ProxyCredential $ProxyCredential
+    
+    
+    -------------------------- EXAMPLE 4 --------------------------
+    
+    PS C:\>Get-CTXBinary.ps1 -DLNumber @(19427,20209) -OutputFolder C:\temp -CitrixUserName asathre688 -CitrixPassword $CitrixPassword -FileName 
+    @('VDAWorkstationSetup_1912.exe','Workspace-Environment-Management-v-2112-01-00-01.zip') -Name @('Single-session OS Virtual Delivery Agent 1912 LTSR CU3', 'Workspace Environment Management 2112')
+    
+    Download multiple files at once
 ```
