@@ -37,10 +37,10 @@ SYNOPSIS
     
     
 SYNTAX
-    C:\Users\Tony\git\CitrixDownloader\Get-CTXBinary.ps1 -DLNumber <Int32[]> -FileName <String[]> -Name <String[]> -OutputFolder <String> -CitrixUserName <String> -CitrixPassword <String> [-Proxy <Uri>] 
+    Get-CTXBinary.ps1 -DLNumber <Int32[]> -FileName <String[]> -Name <String[]> -OutputFolder <String> -CitrixUserName <String> -CitrixPassword <String> [-Proxy <Uri>] 
     [-ProxyUseDefaultCredentials] [<CommonParameters>]
     
-    C:\Users\Tony\git\CitrixDownloader\Get-CTXBinary.ps1 -DLNumber <Int32[]> -FileName <String[]> -Name <String[]> -OutputFolder <String> -CitrixUserName <String> -CitrixPassword <String> [-Proxy <Uri>] 
+    Get-CTXBinary.ps1 -DLNumber <Int32[]> -FileName <String[]> -Name <String[]> -OutputFolder <String> -CitrixUserName <String> -CitrixPassword <String> [-Proxy <Uri>] 
     [-ProxyCredential <PSCredential>] [<CommonParameters>]
     
     
