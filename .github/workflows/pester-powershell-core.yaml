@@ -67,10 +67,10 @@ jobs:
           sudo touch /usr/local/etc/htpasswd
           sudo touch /usr/local/etc/access.log
           sudo htpasswd -b /usr/local/etc/htpasswd $PROXY_USER $PROXY_PASSWORD
-          sudo echo 'auth_param basic program /usr/local/Cellar/squid/4.17/libexec/basic_ncsa_auth /usr/local/etc/htpasswd' >> /usr/local/etc/squid.conf
-          sudo echo 'auth_param basic realm proxy' >> /usr/local/etc/squid.conf
-          sudo echo 'acl authenticated proxy_auth REQUIRED' >> /usr/local/etc/squid.conf
-          sudo echo 'http_access allow authenticated' >> /usr/local/etc/squid.conf
+          #sudo echo 'auth_param basic program /usr/local/Cellar/squid/4.17/libexec/basic_ncsa_auth /usr/local/etc/htpasswd' >> /usr/local/etc/squid.conf
+          #sudo echo 'auth_param basic realm proxy' >> /usr/local/etc/squid.conf
+          #sudo echo 'acl authenticated proxy_auth REQUIRED' >> /usr/local/etc/squid.conf
+          #sudo echo 'http_access allow authenticated' >> /usr/local/etc/squid.conf
           sudo sed -i '' '/http_access deny all/d' /usr/local/etc/squid.conf
           cat /usr/local/etc/squid.conf
           sudo brew services start squid
