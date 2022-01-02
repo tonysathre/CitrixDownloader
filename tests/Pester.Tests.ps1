@@ -38,7 +38,7 @@ Describe 'Test multi-file download' {
     }
 }
 
-Get-ChildItem $TEMP
+Get-ChildItem $TEMP -Verbose
 AfterAll {
     "$TEMP/Citrix_Licensing_11.17.2.0_BUILD_37000.zip", "$TEMP/CitrixProbeAgent2103.msi", "$TEMP/ProfileMgmt_1912.zip" | Remove-Item -Force   
 }
