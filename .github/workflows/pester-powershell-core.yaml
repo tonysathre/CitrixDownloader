@@ -27,10 +27,10 @@ jobs:
           sudo touch /etc/squid/htpasswd
           sudo chown proxy:proxy /etc/squid/htpasswd
           sudo -u proxy htpasswd -b /etc/squid/htpasswd $PROXY_USER $PROXY_PASSWORD
-          sudo echo 'auth_param basic program /usr/lib/squid3/basic_ncsa_auth /etc/squid/htpasswd' >> /etc/squid/squid.conf
-          sudo echo 'auth_param basic realm proxy' >> /etc/squid/squid.conf
-          sudo echo 'acl authenticated proxy_auth REQUIRED' >> /etc/squid/squid.conf
-          sudo echo 'http_access allow authenticated' >> /etc/squid/squid.conf
+          sudo -u proxy echo 'auth_param basic program /usr/lib/squid3/basic_ncsa_auth /etc/squid/htpasswd' >> /etc/squid/squid.conf
+          sudo -u proxy echo 'auth_param basic realm proxy' >> /etc/squid/squid.conf
+          sudo -u proxy echo 'acl authenticated proxy_auth REQUIRED' >> /etc/squid/squid.conf
+          sudo -u proxy echo 'http_access allow authenticated' >> /etc/squid/squid.conf
           sudo service squid start
           sudo curl --verbose --proxy http://$PROXY_USER:$PROXY_PASSWORD@localhost:3128 https://www.google.com
         shell: bash
