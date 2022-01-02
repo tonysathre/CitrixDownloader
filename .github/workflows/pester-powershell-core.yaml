@@ -26,6 +26,7 @@ jobs:
           sudo DEBIAN_FRONTEND=noninteractive apt-get install squid curl -y
           sudo touch /etc/squid/htpasswd
           sudo chown proxy: /etc/squid/htpasswd
+          sudo echo 'proxy ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
           sudo -u proxy printf "$PROXY_USER:$(openssl passwd -crypt $PROXY_PASSWORD)\n" >> /etc/squid/htpasswd
           sudo echo 'auth_param basic program /usr/lib/squid3/basic_ncsa_auth /etc/squid/htpasswd' >> /etc/squid/squid.conf
           sudo echo 'auth_param basic realm proxy' >> /etc/squid/squid.conf
