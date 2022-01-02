@@ -25,8 +25,8 @@ jobs:
           sudo apt-get update 
           sudo DEBIAN_FRONTEND=noninteractive apt-get install squid apache2-utils -y
           sudo touch /etc/squid/htpasswd
-          sudo touch /etc/squid/access.log
-          sudo chown proxy:proxy /etc/squid/access.log
+          sudo touch /var/log/squid/access.log
+          sudo chown proxy:proxy /var/log/squid/access.log
           sudo chown proxy:proxy /etc/squid/htpasswd
           sudo chown proxy:proxy /etc/squid/squid.conf
           sudo -u proxy chmod 777 /etc/squid/squid.conf
@@ -35,7 +35,7 @@ jobs:
           sudo -u proxy echo 'auth_param basic realm proxy' >> /etc/squid/squid.conf
           sudo -u proxy echo 'acl authenticated proxy_auth REQUIRED' >> /etc/squid/squid.conf
           sudo -u proxy echo 'http_access allow authenticated' >> /etc/squid/squid.conf
-          sudo -u proxy echo 'access_log /etc/squid/access.log' >> /etc/squid/squid.conf
+          sudo -u proxy sed -i 's/# access_log daemon:/var/log/squid/access.log squid/access_log daemon:/var/log/squid/access.log squid/' /var/log/squid/access.log
           sudo service squid start
         shell: bash
       
@@ -55,7 +55,7 @@ jobs:
           'auth_param basic realm proxy' | Out-File -Append C:\Squid\etc\squid.conf
           'acl authenticated proxy_auth REQUIRED' | Out-File -Append C:\Squid\etc\squid\squid.conf
           'http_access allow authenticated' | Out-File -Append C:\Squid\etc\squid\squid.conf
-          'access_log access_log C:\Squid\etc\squid\access.log' | Out-File -Append C:\Squid\etc\squid\squid.conf
+          'access_log C:\Squid\etc\squid\access.log combined' | Out-File -Append C:\Squid\etc\squid\squid.conf
           "$env:PROXY_USER:$bcryptHash" | Out-File C:\Squid\etc\squid\users.htpasswd
           Start-Service squidsrv
         shell: pwsh
@@ -71,7 +71,6 @@ jobs:
           Set-PSRepository psgallery -InstallationPolicy trusted
           Install-Module -Name Pester -RequiredVersion 5.3.1 -Confirm:$false -Force
           Invoke-Pester -Path .\tests\ -Output Diagnostic
-          Get-Content C:\Squid\etc\squid\access.log
         shell: pwsh
 
       - name: Get Squid Access Log (Linux)
