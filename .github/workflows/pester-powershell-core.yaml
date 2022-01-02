@@ -35,7 +35,7 @@ jobs:
           sudo -u proxy echo 'auth_param basic realm proxy' >> /etc/squid/squid.conf
           sudo -u proxy echo 'acl authenticated proxy_auth REQUIRED' >> /etc/squid/squid.conf
           sudo -u proxy echo 'http_access allow authenticated' >> /etc/squid/squid.conf
-          sudo -u proxy 's/# access_log daemon:/var/log/squid/access.log/access_log daemon:/var/log/squid/access.log/' /etc/squid/squid.conf
+          sudo -u proxy sed 's/# access_log daemon:/var/log/squid/access.log/access_log daemon:/var/log/squid/access.log/' /etc/squid/squid.conf
           sudo service squid start
         shell: bash
       
