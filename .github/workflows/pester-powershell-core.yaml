@@ -31,7 +31,6 @@ jobs:
           sudo chown proxy:proxy /etc/squid/squid.conf
           sudo -u proxy chmod 777 /etc/squid/squid.conf
           sudo -u proxy chmod 777 /var/log/squid/access.log
-          
           sudo -u proxy htpasswd -b /etc/squid/htpasswd $PROXY_USER $PROXY_PASSWORD
           sudo -u proxy echo 'auth_param basic program /usr/lib/squid3/basic_ncsa_auth /etc/squid/htpasswd' >> /etc/squid/squid.conf
           sudo -u proxy echo 'auth_param basic realm proxy' >> /etc/squid/squid.conf
@@ -65,6 +64,8 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install squid
+          ls /usr/local/squid/etc
+          htpasswd
         shell: bash
         
       - name: Run Pester Tests for PowerShell Core
