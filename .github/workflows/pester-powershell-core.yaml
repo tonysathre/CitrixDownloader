@@ -25,6 +25,8 @@ jobs:
           sudo apt-get update 
           sudo DEBIAN_FRONTEND=noninteractive apt-get install squid apache2-utils -y
           sudo touch /etc/squid/htpasswd
+          sudo touch /etc/squid/access.log
+          sudo chown proxy:proxy /etc/squid/access.log
           sudo chown proxy:proxy /etc/squid/htpasswd
           sudo chown proxy:proxy /etc/squid/squid.conf
           sudo -u proxy chmod 777 /etc/squid/squid.conf
@@ -48,6 +50,7 @@ jobs:
           $crypt = New-Object Chilkat.Crypt2
           $bcryptHash = $crypt.BCryptHash($env:PROXY_PASSWORD)
           New-Item -Type File C:\Squid\etc\squid\users.htpasswd
+          New-Item -Type File C:\Squid\etc\squid\access.log
           'auth_param basic program /lib/squid/basic_ncsa_auth.exe C:\Squid\etc\squid\users.htpasswd' | Out-File -Append C:\Squid\etc\squid\squid.conf
           'auth_param basic realm proxy' | Out-File -Append C:\Squid\etc\squid.conf
           'acl authenticated proxy_auth REQUIRED' | Out-File -Append C:\Squid\etc\squid\squid.conf
