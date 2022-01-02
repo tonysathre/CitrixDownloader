@@ -73,12 +73,9 @@ jobs:
           sudo echo 'acl authenticated proxy_auth REQUIRED' >> /usr/local/etc/squid.conf
           sudo echo 'http_access allow authenticated' >> /usr/local/etc/squid.conf
           brew services start squid
+          cat /usr/local/etc/squid.conf
           curl --verbose --proxy http://localhost:3128 https://www.google.com
         shell: bash
-      
-      - name: Setup tmate session
-        if: runner.os == 'macOS'
-        uses: mxschmitt/action-tmate@v3
         
       - name: Run Pester Tests for PowerShell Core
         run: |
