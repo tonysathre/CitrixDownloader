@@ -52,7 +52,7 @@ jobs:
           'auth_param basic realm proxy' | Out-File -Append C:\Squid\etc\squid.conf
           'acl authenticated proxy_auth REQUIRED' | Out-File -Append C:\Squid\etc\squid\squid.conf
           'http_access allow authenticated' | Out-File -Append C:\Squid\etc\squid\squid.conf
-          'access_log access_log C:\Squid\var\logs\access.log' | Out-File -Append C:\Squid\etc\squid\squid.conf
+          'access_log access_log C:\Squid\etc\squid\access.log' | Out-File -Append C:\Squid\etc\squid\squid.conf
           "$env:PROXY_USER:$bcryptHash" | Out-File C:\Squid\etc\squid\users.htpasswd
           Start-Service squidsrv
         shell: powershell
@@ -68,5 +68,5 @@ jobs:
           Set-PSRepository psgallery -InstallationPolicy trusted
           Install-Module -Name Pester -RequiredVersion 5.3.1 -Confirm:$false -Force
           Invoke-Pester -Path .\tests\ -Output Diagnostic
-          Get-Content C:\Squid\var\logs\access.log
+          Get-Content C:\Squid\etc\squid\access.log
         shell: pwsh
