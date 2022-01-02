@@ -74,6 +74,7 @@ jobs:
           sudo sed -i '' '/http_access deny all/d' /usr/local/etc/squid.conf
           cat /usr/local/etc/squid.conf
           sudo brew services start squid
+          sudo lsof -iTCP -sTCP:LISTEN -n -P
         shell: bash
         
       - name: Setup tmate session
