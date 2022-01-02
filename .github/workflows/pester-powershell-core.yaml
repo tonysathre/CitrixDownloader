@@ -17,9 +17,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
         
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        
       - name: Run Pester Tests for PowerShell Core
         run: |
           Set-PSRepository psgallery -InstallationPolicy trusted
