@@ -1,4 +1,4 @@
-$TEMP = [System.IO.Path]::GetTempPath()
+$global:TEMP = [System.IO.Path]::GetTempPath()
 $TEMP = $TEMP.Substring(0, $TEMP.Length-1)
 & ./Get-CTXBinary.ps1 -DLNumber 19997 -OutputFolder $TEMP -CitrixUserName $env:CITRIXUSERNAME -CitrixPassword $env:CITRIXPASSWORD -FileName 'ProfileMgmt_1912.zip' -Name 'Profile Management 1912 LTSR CU4'
 
