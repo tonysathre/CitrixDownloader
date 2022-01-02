@@ -71,9 +71,9 @@ jobs:
           sudo echo 'auth_param basic realm proxy' >> /usr/local/etc/squid.conf
           sudo echo 'acl authenticated proxy_auth REQUIRED' >> /usr/local/etc/squid.conf
           sudo echo 'http_access allow authenticated' >> /usr/local/etc/squid.conf
-          sudo brew services start squid
           cat /usr/local/etc/squid.conf
-          sudo sed -e -i '/http_access deny all/d' /usr/local/etc/squid.conf
+          sudo sed -e -i '' '/http_access deny all/d' /usr/local/etc/squid.conf
+          sudo brew services start squid
           curl --verbose --proxy http://localhost:3128 https://www.google.com
         shell: bash
         
