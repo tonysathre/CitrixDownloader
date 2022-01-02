@@ -64,10 +64,12 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install squid
-          ls /usr/local/squid
-          htpasswd
           brew services start squid
         shell: bash
+      
+      - name: Setup tmate session
+        if: runner.os == 'macOS'
+        uses: mxschmitt/action-tmate@v3
         
       - name: Run Pester Tests for PowerShell Core
         run: |
