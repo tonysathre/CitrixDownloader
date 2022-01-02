@@ -1,6 +1,6 @@
 $TEMP = [System.IO.Path]::GetTempPath()
 $TEMP = $TEMP.Substring(0, $TEMP.Length-1)
-& ./Get-CTXBinary.ps1 -DLNumber 19997 -OutputFolder $TEMP -CitrixUserName $env:CITRIXUSERNAME -CitrixPassword $env:CITRIXPASSWORD -FileName 'ProfileMgmt_1912.zip' -Name 'Profile Management 1912 LTSR CU4' -Verbose
+& ./Get-CTXBinary.ps1 -DLNumber 19997 -OutputFolder $TEMP -CitrixUserName $env:CITRIXUSERNAME -CitrixPassword $env:CITRIXPASSWORD -FileName 'ProfileMgmt_1912.zip' -Name 'Profile Management 1912 LTSR CU4'
 
 Describe 'Downloads a single file from Citrix.com' {
     It 'Downloaded file ProfileMgmt_1912.zip should exist' {
@@ -12,7 +12,7 @@ Describe 'Downloads a single file from Citrix.com' {
     }
 }
 
-& ./Get-CTXBinary.ps1 -DLNumber @(9803,19228) -OutputFolder $TEMP -CitrixUserName $env:CITRIXUSERNAME -CitrixPassword $env:CITRIXPASSWORD -FileName @('Citrix_Licensing_11.17.2.0_BUILD_37000.zip','CitrixProbeAgent2103.msi') -Name 'Single-session OS Virtual Delivery Agent 1912 LTSR CU3', 'Workspace Environment Management 2112' -Verbose
+& ./Get-CTXBinary.ps1 -DLNumber @(9803,19228) -OutputFolder $TEMP -CitrixUserName $env:CITRIXUSERNAME -CitrixPassword $env:CITRIXPASSWORD -FileName @('Citrix_Licensing_11.17.2.0_BUILD_37000.zip','CitrixProbeAgent2103.msi') -Name 'Single-session OS Virtual Delivery Agent 1912 LTSR CU3', 'Workspace Environment Management 2112'
 
 Describe 'Test multi-file download' {
     It 'Downloaded file Citrix_Licensing_11.17.2.0_BUILD_37000.zip should exist' {
