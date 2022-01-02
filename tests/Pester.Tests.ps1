@@ -1,10 +1,8 @@
 BeforeAll {
-    $CitrixUserName = $env:CitrixUserName
-    $CitrixPassword = $env:CitrixPassword
-    #"$env:TEMP\Citrix_Licensing_11.17.2.0_BUILD_37000.zip", "$env:TEMP\CitrixProbeAgent2103.msi", "$env:TEMP\ProfileMgmt_1912.zip" | Remove-Item -Force -ErrorAction SilentlyContinue
+    "$env:TEMP\Citrix_Licensing_11.17.2.0_BUILD_37000.zip", "$env:TEMP\CitrixProbeAgent2103.msi", "$env:TEMP\ProfileMgmt_1912.zip" | Remove-Item -Force -ErrorAction SilentlyContinue
 }
 
-& .\Get-CTXBinary.ps1 -DLNumber 19997 -OutputFolder $env:TEMP -CitrixUserName $env:CitrixUserName -CitrixPassword $env:CitrixPassword -FileName 'ProfileMgmt_1912.zip' -Name 'Profile Management 1912 LTSR CU4'
+& .\Get-CTXBinary.ps1 -DLNumber 19997 -OutputFolder $env:TEMP -CitrixUserName $env:CITRIXUSERNAME -CitrixPassword $env:CITRIXPASSWORD -FileName 'ProfileMgmt_1912.zip' -Name 'Profile Management 1912 LTSR CU4'
 
 Describe 'Downloads a single file from Citrix.com' {
     It 'Downloaded file ProfileMgmt_1912.zip should exist' {
@@ -16,7 +14,7 @@ Describe 'Downloads a single file from Citrix.com' {
     }
 }
 
-& .\Get-CTXBinary.ps1 -DLNumber @(9803,19228) -OutputFolder $env:TEMP -CitrixUserName $env:CitrixUserName -CitrixPassword $env:CitrixPassword -FileName @('Citrix_Licensing_11.17.2.0_BUILD_37000.zip','CitrixProbeAgent2103.msi') -Name 'Single-session OS Virtual Delivery Agent 1912 LTSR CU3', 'Workspace Environment Management 2112'
+& .\Get-CTXBinary.ps1 -DLNumber @(9803,19228) -OutputFolder $env:TEMP -CitrixUserName $env:CITRIXUSERNAME -CitrixPassword $env:CITRIXPASSWORD -FileName @('Citrix_Licensing_11.17.2.0_BUILD_37000.zip','CitrixProbeAgent2103.msi') -Name 'Single-session OS Virtual Delivery Agent 1912 LTSR CU3', 'Workspace Environment Management 2112'
 
 Describe 'Test multi-file download' {
     It 'Downloaded file Citrix_Licensing_11.17.2.0_BUILD_37000.zip should exist' {
@@ -37,5 +35,5 @@ Describe 'Test multi-file download' {
 }
 
 AfterAll {
-    #"$env:TEMP\Citrix_Licensing_11.17.2.0_BUILD_37000.zip", "$env:TEMP\CitrixProbeAgent2103.msi", "$env:TEMP\ProfileMgmt_1912.zip" | Remove-Item -Force   
+    "$env:TEMP\Citrix_Licensing_11.17.2.0_BUILD_37000.zip", "$env:TEMP\CitrixProbeAgent2103.msi", "$env:TEMP\ProfileMgmt_1912.zip" | Remove-Item -Force   
 }
