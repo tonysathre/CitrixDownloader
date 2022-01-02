@@ -67,7 +67,7 @@ jobs:
           ls /usr/local/etc/squid.conf
           sudo touch /usr/local/etc/htpasswd
           sudo touch /usr/local/etc/access.log
-          find / -name "basic_ncsa_auth"
+          sudo find / -name "basic_ncsa_auth" 2> /dev/null
           sudo htpasswd -b /usr/local/etc/htpasswd $PROXY_USER $PROXY_PASSWORD
           sudo echo 'auth_param basic program /usr/lib/squid3/basic_ncsa_auth /usr/local/etc/htpasswd' >> /usr/local/etc/squid.conf
           sudo echo 'auth_param basic realm proxy' >> /usr/local/etc/squid.conf
