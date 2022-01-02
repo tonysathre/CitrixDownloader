@@ -10,6 +10,9 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
     runs-on: ${{ matrix.os }}
+    env:
+      CITRIXUSERNAME: ${secrets.CITRIXUSERNAME}
+      CITRIXPASSWORD: ${secrets.CITRIXPASSWORD}
     steps:
       - uses: actions/checkout@v1
       - name: Run Pester Tests
