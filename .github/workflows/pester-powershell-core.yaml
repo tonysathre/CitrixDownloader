@@ -64,7 +64,7 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install squid
-          ls /usr/local/Cellar/squid/4.17/share
+          cat /usr/local/squid/etc/squid.conf
           htpasswd
           brew services start squid
         shell: bash
