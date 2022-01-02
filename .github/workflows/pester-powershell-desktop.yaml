@@ -1,4 +1,4 @@
-name: Run Pester Tests with PowerShell Desktop
+name: PowerShell Desktop Tests
 
 on:
   [push, pull_request]
