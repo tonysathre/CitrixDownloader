@@ -17,8 +17,8 @@ jobs:
       - uses: actions/checkout@v1
       - name: Run Pester Tests
         run: |
-        Set-PSRepository psgallery -InstallationPolicy trusted
-        Install-Module -Name Pester -RequiredVersion 5.3.1 -Confirm:$false -Force
-        Invoke-Pester -Path .\tests\
+          Set-PSRepository psgallery -InstallationPolicy trusted
+          Install-Module -Name Pester -RequiredVersion 5.3.1 -Confirm:$false -Force
+          Invoke-Pester -Path .\tests\
         shell: pwsh
 
