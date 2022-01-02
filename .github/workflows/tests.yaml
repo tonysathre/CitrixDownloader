@@ -22,7 +22,4 @@ jobs:
           Invoke-Pester -Path .\tests\ -Output Diagnostic
         shell: pwsh
         
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        
         
