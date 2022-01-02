@@ -25,8 +25,8 @@ jobs:
           sudo apt-get update 
           sudo DEBIAN_FRONTEND=noninteractive apt-get install squid curl apache2-utils -y
           sudo touch /etc/squid/htpasswd
+          sudo htpasswd -b /etc/squid/htpasswd $PROXY_USER $PROXY_PASSWORD
           sudo chown proxy: /etc/squid/htpasswd
-          sudo htpasswd /etc/squid/htpasswd $PROXY_USER -b $PROXY_PASSWORD
           sudo echo 'auth_param basic program /usr/lib/squid3/basic_ncsa_auth /etc/squid/htpasswd' >> /etc/squid/squid.conf
           sudo echo 'auth_param basic realm proxy' >> /etc/squid/squid.conf
           sudo echo 'acl authenticated proxy_auth REQUIRED' >> /etc/squid/squid.conf
