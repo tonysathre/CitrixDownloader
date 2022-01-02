@@ -1,5 +1,6 @@
 BeforeAll {
     $TEMP = [System.IO.Path]::GetTempPath()
+    $TEMP
     "$TEMP\Citrix_Licensing_11.17.2.0_BUILD_37000.zip", "$TEMP\CitrixProbeAgent2103.msi", "$TEMP\ProfileMgmt_1912.zip" | Remove-Item -Force -ErrorAction SilentlyContinue
 }
 
