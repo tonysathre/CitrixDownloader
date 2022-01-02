@@ -46,8 +46,15 @@ jobs:
           Expand-Archive $env:TEMP\chilkatdotnet48-9.5.0-x64.zip -DestinationPath $env:TEMP\ -Force
           Add-Type -Path "$env:TEMP\chilkatdotnet48-9.5.0-x64\ChilkatDotNet48.dll"
           $crypt = New-Object Chilkat.Crypt2
-          $bcryptHash = $crypt.BCryptHash("mySecretPassword")
+          $bcryptHash = $crypt.BCryptHash($env:PROXY_PASSWORD)
           $("BCrypt hash = " + $bcryptHash)
+          New-Item -Type File C:\Squid\etc\squid\users.htpasswd
+          'auth_param basic program /lib/squid/basic_ncsa_auth.exe C:\Squid\etc\squid\users.htpasswd' | Out-File -Append C:\Squid\etc\squid\squid.conf
+          'auth_param basic realm proxy' | Out-File -Append C:\Squid\etc\squid.conf
+          'acl authenticated proxy_auth REQUIRED' | Out-File -Append C:\Squid\etc\squid\squid.conf
+          'http_access allow authenticated' | Out-File -Append C:\Squid\etc\squid\squid.conf
+          "$env:PROXY_USER:$env:PROXY_PASSWORD" | Out-File C:\Squid\etc\squid\users.htpasswd
+          Get-Service
         shell: powershell
 
       - name: Setup Squid Proxy Server (MacOS)
