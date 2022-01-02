@@ -41,6 +41,7 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           choco install squid
+          ls C:\Squid
         shell: powershell
 
       - name: Setup Squid Proxy Server (MacOS)
