@@ -1,9 +1,9 @@
 BeforeAll {
-    $TEMP = [System.IO.Path]::GetTempPath()
+    $TEMP = [System.IO.Path]::GetTempPath().Substring(0, $TEMP.Length-1)
     "$TEMP/Citrix_Licensing_11.17.2.0_BUILD_37000.zip", "$TEMP/CitrixProbeAgent2103.msi", "$TEMP/ProfileMgmt_1912.zip" | Remove-Item -Force -ErrorAction SilentlyContinue
 }
 
-$TEMP = [System.IO.Path]::GetTempPath()
+$TEMP = [System.IO.Path]::GetTempPath().Substring(0, $TEMP.Length-1)
 & ./Get-CTXBinary.ps1 -DLNumber 19997 -OutputFolder $TEMP -CitrixUserName $env:CITRIXUSERNAME -CitrixPassword $env:CITRIXPASSWORD -FileName 'ProfileMgmt_1912.zip' -Name 'Profile Management 1912 LTSR CU4'
 
 Describe 'Downloads a single file from Citrix.com' {
