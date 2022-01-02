@@ -12,6 +12,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+        
       - name: Run Pester Tests for PowerShell Desktop
         run: |
           Set-PSRepository psgallery -InstallationPolicy trusted
