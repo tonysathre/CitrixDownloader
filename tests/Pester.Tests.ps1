@@ -1,7 +1,7 @@
 BeforeAll {
     $TEMP = [System.IO.Path]::GetTempPath()
     $TEMP = $TEMP.Substring(0, $TEMP.Length-1)
-    "$TEMP/Citrix_Licensing_11.17.2.0_BUILD_37000.zip", "$TEMP/CitrixProbeAgent2103.msi", "$TEMP/ProfileMgmt_1912.zip" | Remove-Item -Force -ErrorAction SilentlyContinue
+    #"$TEMP/Citrix_Licensing_11.17.2.0_BUILD_37000.zip", "$TEMP/CitrixProbeAgent2103.msi", "$TEMP/ProfileMgmt_1912.zip" | Remove-Item -Force -ErrorAction SilentlyContinue
 }
 
 $TEMP = [System.IO.Path]::GetTempPath()
@@ -38,7 +38,7 @@ Describe 'Test multi-file download' {
     }
 }
 
-Get-ChildItem $TEMP -Verbose
 AfterAll {
-    "$TEMP/Citrix_Licensing_11.17.2.0_BUILD_37000.zip", "$TEMP/CitrixProbeAgent2103.msi", "$TEMP/ProfileMgmt_1912.zip" | Remove-Item -Force   
+    Get-ChildItem $TEMP -Verbose
+    #"$TEMP/Citrix_Licensing_11.17.2.0_BUILD_37000.zip", "$TEMP/CitrixProbeAgent2103.msi", "$TEMP/ProfileMgmt_1912.zip" | Remove-Item -Force   
 }
