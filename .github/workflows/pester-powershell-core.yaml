@@ -1,4 +1,4 @@
-name: Run Pester Tests with PowerShell Core
+name: PowerShell Core Tests
 
 on:
   [push, pull_request]
