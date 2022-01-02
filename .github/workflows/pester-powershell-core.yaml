@@ -14,7 +14,8 @@ jobs:
       CITRIXUSERNAME: ${{ secrets.CITRIXUSERNAME }}
       CITRIXPASSWORD: ${{ secrets.CITRIXPASSWORD }}
     steps:
-      - uses: actions/checkout@v1
+      - name: Checkout
+        uses: actions/checkout@v1
       - name: Run Pester Tests
         run: |
           Set-PSRepository psgallery -InstallationPolicy trusted
