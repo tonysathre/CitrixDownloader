@@ -41,7 +41,13 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           choco install squid
-          ls C:\Squid\etc\squid
+          $ProgressPreference = 'SilentlyContinue'
+          Invoke-WebRequest -Uri https://chilkatdownload.com/9.5.0.89/chilkatdotnet48-9.5.0-x64.zip -OutFile $env:TEMP\chilkatdotnet48-9.5.0-x64.zip
+          Expand-Archive $env:TEMP\chilkatdotnet48-9.5.0-x64.zip -DestinationPath $env:TEMP\ -Force
+          Add-Type -Path "$env:TEMP\chilkatdotnet48-9.5.0-x64\ChilkatDotNet48.dll"
+          $crypt = New-Object Chilkat.Crypt2
+          $bcryptHash = $crypt.BCryptHash("mySecretPassword")
+          $("BCrypt hash = " + $bcryptHash)
         shell: powershell
 
       - name: Setup Squid Proxy Server (MacOS)
