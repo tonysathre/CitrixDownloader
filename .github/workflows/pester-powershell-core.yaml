@@ -78,7 +78,7 @@ jobs:
       - name: Get Squid Access Log (Linux)
         if: runner.os == 'Linux'
         run: |
-          cat /etc/squid/access.log
+          cat /var/log/squid/access.log
         shell: bash
         
       - name: Get Squid Access Log (Windows)
