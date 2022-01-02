@@ -21,19 +21,3 @@ jobs:
           Install-Module -Name Pester -RequiredVersion 5.3.1 -Confirm:$false -Force
           Invoke-Pester -Path .\tests\ -Output Diagnostic
         shell: pwsh
-
-    pester-powershell-desktop:
-    strategy:
-      fail-fast: false
-    runs-on: windows-latest
-    env:
-      CITRIXUSERNAME: ${{ secrets.CITRIXUSERNAME }}
-      CITRIXPASSWORD: ${{ secrets.CITRIXPASSWORD }}
-    steps:
-      - uses: actions/checkout@v1
-      - name: Run Pester Tests
-        run: |
-          Set-PSRepository psgallery -InstallationPolicy trusted
-          Install-Module -Name Pester -RequiredVersion 5.3.1 -Confirm:$false -Force
-          Invoke-Pester -Path .\tests\ -Output Diagnostic
-        shell: powershell    
