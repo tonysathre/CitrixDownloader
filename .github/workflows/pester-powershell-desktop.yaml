@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      - name: Run Pester Tests
+      - name: Run Pester Tests for PowerShell Desktop
         run: |
           Set-PSRepository psgallery -InstallationPolicy trusted
           Install-Module -Name Pester -RequiredVersion 5.3.1 -Confirm:$false -Force
