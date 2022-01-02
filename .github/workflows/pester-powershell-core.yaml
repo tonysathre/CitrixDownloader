@@ -21,3 +21,5 @@ jobs:
           Install-Module -Name Pester -RequiredVersion 5.3.1 -Confirm:$false -Force
           Invoke-Pester -Path .\tests\ -Output Diagnostic
         shell: pwsh
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
