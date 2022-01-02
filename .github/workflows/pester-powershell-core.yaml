@@ -15,7 +15,7 @@ jobs:
       CITRIXPASSWORD: ${{ secrets.CITRIXPASSWORD }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+      - uses: actions/checkout@v1
       - name: Run Pester Tests
         run: |
           Set-PSRepository psgallery -InstallationPolicy trusted
@@ -23,4 +23,4 @@ jobs:
           Invoke-Pester -Path .\tests\ -Output Diagnostic
         shell: pwsh
       - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
+      - uses: mxschmitt/action-tmate@v3
