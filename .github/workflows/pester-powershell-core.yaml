@@ -13,9 +13,37 @@ jobs:
     env:
       CITRIXUSERNAME: ${{ secrets.CITRIXUSERNAME }}
       CITRIXPASSWORD: ${{ secrets.CITRIXPASSWORD }}
+      PROXY_USER:     ${{ secrets.PROXY_USER }}
+      PROXY_PASSWORD: ${{ secrets.PROXY_PASSWORD }}
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+      
+      - name: Setup Squid Proxy Server (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update 
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install squid curl -y
+          sudo printf "$PROXY_USER:$(openssl passwd -crypt $PROXY_PASSWORD)\n" >> /etc/squid/htpasswd
+          sudo echo 'auth_param basic program /usr/lib/squid3/basic_ncsa_auth /etc/squid/htpasswd' >> /etc/squid/squid.conf
+          sudo echo 'auth_param basic realm proxy' >> /etc/squid/squid.conf
+          sudo echo 'acl authenticated proxy_auth REQUIRED' >> /etc/squid/squid.conf
+          sudo echo 'http_access allow authenticated' >> /etc/squid/squid.conf
+          sudo service squid start
+          sudo curl --verbose --proxy http://$PROXY_USER:$PROXY_PASSWORD@localhost:3128 https://www.google.com
+        shell: bash
+      
+      - name: Setup Squid Proxy Server (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          choco install squid
+        shell: powershell
+
+      - name: Setup Squid Proxy Server (MacOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install squid
+        shell: bash
         
       - name: Run Pester Tests for PowerShell Core
         run: |
