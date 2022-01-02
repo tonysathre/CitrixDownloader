@@ -28,6 +28,7 @@ jobs:
           sudo chown proxy:proxy /etc/squid/htpasswd
           sudo chown proxy:proxy /etc/squid/squid.conf
           sudo -u proxy htpasswd -b /etc/squid/htpasswd $PROXY_USER $PROXY_PASSWORD
+          ls -la /etc/squid/
           sudo -u proxy echo 'auth_param basic program /usr/lib/squid3/basic_ncsa_auth /etc/squid/htpasswd' >> /etc/squid/squid.conf
           sudo -u proxy echo 'auth_param basic realm proxy' >> /etc/squid/squid.conf
           sudo -u proxy echo 'acl authenticated proxy_auth REQUIRED' >> /etc/squid/squid.conf
