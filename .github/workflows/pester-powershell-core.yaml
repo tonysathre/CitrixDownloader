@@ -73,8 +73,8 @@ jobs:
           #sudo echo 'http_access allow authenticated' >> /usr/local/etc/squid.conf
           sudo sed -i '' '/http_access deny all/d' /usr/local/etc/squid.conf
           cat /usr/local/etc/squid.conf
-          sudo brew services start squid
-          sudo brew services list
+          brew services start squid
+          brew services list
           sudo lsof -iTCP -sTCP:LISTEN -n -P
         shell: bash
         
