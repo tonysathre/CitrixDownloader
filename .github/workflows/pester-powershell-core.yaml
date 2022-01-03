@@ -11,11 +11,11 @@ jobs:
         os: [ubuntu-latest, windows-latest, macOS-latest]
     runs-on: ${{ matrix.os }}
     env:
-      CITRIXUSERNAME: ${{ secrets.CITRIXUSERNAME }}
-      CITRIXPASSWORD: ${{ secrets.CITRIXPASSWORD }}
-      PROXY_USER:     ${{ secrets.PROXY_USER }}
-      PROXY_PASSWORD: ${{ secrets.PROXY_PASSWORD }}
-      DEBUG:          ${{ 'false' }}
+      CITRIX_USERNAME: ${{ secrets.CITRIX_USERNAME }}
+      CITRIX_PASSWORD: ${{ secrets.CITRIX_PASSWORD }}
+      PROXY_USERNAME:  ${{ secrets.PROXY_USERNAME }}
+      PROXY_PASSWORD:  ${{ secrets.PROXY_PASSWORD }}
+      DEBUG:           ${{ 'false' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -32,7 +32,7 @@ jobs:
           sudo chown proxy:proxy /etc/squid/squid.conf
           sudo -u proxy chmod 777 /etc/squid/squid.conf
           sudo -u proxy chmod 777 /var/log/squid/access.log
-          sudo -u proxy htpasswd -b /etc/squid/htpasswd $PROXY_USER $PROXY_PASSWORD
+          sudo -u proxy htpasswd -b /etc/squid/htpasswd $PROXY_USERNAME $PROXY_PASSWORD
           sudo -u proxy echo 'auth_param basic program /usr/lib/squid3/basic_ncsa_auth /etc/squid/htpasswd' >> /etc/squid/squid.conf
           sudo -u proxy echo 'auth_param basic realm proxy' >> /etc/squid/squid.conf
           sudo -u proxy echo 'acl authenticated proxy_auth REQUIRED' >> /etc/squid/squid.conf
@@ -57,7 +57,7 @@ jobs:
           'acl authenticated proxy_auth REQUIRED' | Out-File -Append C:\Squid\etc\squid\squid.conf
           'http_access allow authenticated' | Out-File -Append C:\Squid\etc\squid\squid.conf
           'access_log C:\Squid\var\log\squid\access.log combined' | Out-File -Append C:\Squid\etc\squid\squid.conf
-          "$env:PROXY_USER:$bcryptHash" | Out-File C:\Squid\etc\squid\users.htpasswd
+          "$env:PROXY_USERNAME:$bcryptHash" | Out-File C:\Squid\etc\squid\users.htpasswd
           Start-Service squidsrv
         shell: pwsh
 
@@ -67,7 +67,7 @@ jobs:
           brew install squid
           sudo touch /usr/local/etc/htpasswd
           sudo touch /usr/local/etc/access.log
-          sudo htpasswd -b /usr/local/etc/htpasswd $PROXY_USER $PROXY_PASSWORD
+          sudo htpasswd -b /usr/local/etc/htpasswd $PROXY_USERNAME $PROXY_PASSWORD
           sudo echo 'auth_param basic program /usr/local/Cellar/squid/4.17/libexec/basic_ncsa_auth /usr/local/etc/htpasswd' >> /usr/local/etc/squid.conf
           sudo echo 'auth_param basic realm proxy' >> /usr/local/etc/squid.conf
           sudo echo 'acl authenticated proxy_auth REQUIRED' >> /usr/local/etc/squid.conf

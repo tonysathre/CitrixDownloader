@@ -1,13 +1,13 @@
 $global:TEMP = [System.IO.Path]::GetTempPath()
 $TEMP = $TEMP.Substring(0, $TEMP.Length-1)
 [securestring]$secStringPassword = ConvertTo-SecureString $env:PROXY_PASSWORD -AsPlainText -Force
-[pscredential]$global:ProxyCredential = New-Object System.Management.Automation.PSCredential ($env:PROXY_USER, $secStringPassword)
+[pscredential]$global:ProxyCredential = New-Object System.Management.Automation.PSCredential ($env:PROXY_USERNAME, $secStringPassword)
 
 $Params = @{
     DLNumber       = 19997
     OutputFolder   = $TEMP
-    CitrixUserName = $env:CITRIXUSERNAME
-    CitrixPassword = $env:CITRIXPASSWORD
+    CitrixUserName = $env:CITRIX_USERNAME
+    CitrixPassword = $env:CITRIX_PASSWORD
     FileName       = 'ProfileMgmt_1912.zip'
     Name           = 'Profile Management 1912 LTSR CU4'
 }
@@ -27,8 +27,8 @@ Describe 'Downloads a single file from Citrix.com' {
 $Params = @{
     DLNumber       = @(9803,19228)
     OutputFolder   = $TEMP
-    CitrixUserName = $env:CITRIXUSERNAME
-    CitrixPassword = $env:CITRIXPASSWORD
+    CitrixUserName = $env:CITRIX_USERNAME
+    CitrixPassword = $env:CITRIX_PASSWORD
     FileName       = @('Citrix_Licensing_11.17.2.0_BUILD_37000.zip','CitrixProbeAgent2103.msi')
     Name           = @('Single-session OS Virtual Delivery Agent 1912 LTSR CU3', 'Workspace Environment Management 2112')
 }
@@ -56,8 +56,8 @@ Describe 'Test multi-file download' {
 $Params = @{
     DLNumber        = 19430
     OutputFolder    = $TEMP
-    CitrixUserName  = $env:CITRIXUSERNAME
-    CitrixPassword  = $env:CITRIXPASSWORD
+    CitrixUserName  = $env:CITRIX_USERNAME
+    CitrixPassword  = $env:CITRIX_PASSWORD
     FileName        = 'CitrixStoreFront-x64.exe'
     Name            = 'StoreFront 1912 LTSR CU3'
     Proxy           = 'http://localhost:3128'
@@ -80,8 +80,8 @@ Describe 'Downloads a single file from Citrix.com using proxy' {
 $Params = @{
     DLNumber        = @(12509,12509)
     OutputFolder    = $TEMP
-    CitrixUserName  = $env:CITRIXUSERNAME
-    CitrixPassword  = $env:CITRIXPASSWORD
+    CitrixUserName  = $env:CITRIX_USERNAME
+    CitrixPassword  = $env:CITRIX_PASSWORD
     FileName        = @('xendesktopvda_21.12.0.30-1.ubuntu16.04_amd64.deb','xendesktopvda_21.12.0.30-1.ubuntu18.04_amd64.deb')
     Name            = @('Linux Virtual Delivery Agent 2112 (Ubuntu 16.04)', 'Linux Virtual Delivery Agent 2112 (Ubuntu 18.04)')
     Proxy           = 'http://localhost:3128'
