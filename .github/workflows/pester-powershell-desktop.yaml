@@ -41,3 +41,14 @@ jobs:
           Install-Module -Name Pester -RequiredVersion 5.3.1 -Confirm:$false -Force
           Invoke-Pester -Path .\tests\ -Output Diagnostic
         shell: powershell
+        
+      - name: Get Squid Access Log (Windows)
+        if: |
+          env.DEBUG == 'true'
+        run: |
+          Get-Content C:\Squid\var\log\squid\access.log
+        shell: powershell
+
+      - name: Setup tmate session
+        if: env.DEBUG == 'true'
+        uses: mxschmitt/action-tmate@v3
