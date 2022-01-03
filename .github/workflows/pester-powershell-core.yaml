@@ -15,7 +15,7 @@ jobs:
       CITRIXPASSWORD: ${{ secrets.CITRIXPASSWORD }}
       PROXY_USER:     ${{ secrets.PROXY_USER }}
       PROXY_PASSWORD: ${{ secrets.PROXY_PASSWORD }}
-      DEBUG:          ${{ 'true' }}
+      DEBUG:          ${{ 'false' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v1
