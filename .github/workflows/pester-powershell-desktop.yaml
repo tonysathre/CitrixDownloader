@@ -9,9 +9,31 @@ jobs:
     env:
       CITRIXUSERNAME: ${{ secrets.CITRIXUSERNAME }}
       CITRIXPASSWORD: ${{ secrets.CITRIXPASSWORD }}
+      PROXY_USER:     ${{ secrets.PROXY_USER }}
+      PROXY_PASSWORD: ${{ secrets.PROXY_PASSWORD }}
+      DEBUG:          ${{ 'false' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+        
+      - name: Setup Squid Proxy Server (Windows)
+        run: |
+          choco install squid
+          $ProgressPreference = 'SilentlyContinue'
+          Invoke-WebRequest -Uri https://chilkatdownload.com/9.5.0.89/chilkatdotnet48-9.5.0-x64.zip -OutFile $env:TEMP\chilkatdotnet48-9.5.0-x64.zip
+          Expand-Archive $env:TEMP\chilkatdotnet48-9.5.0-x64.zip -DestinationPath $env:TEMP\ -Force
+          Add-Type -Path "$env:TEMP\chilkatdotnet48-9.5.0-x64\ChilkatDotNet48.dll"
+          $crypt = New-Object Chilkat.Crypt2
+          $bcryptHash = $crypt.BCryptHash($env:PROXY_PASSWORD)
+          New-Item -Type File C:\Squid\etc\squid\users.htpasswd
+          'auth_param basic program /lib/squid/basic_ncsa_auth.exe C:\Squid\etc\squid\users.htpasswd' | Out-File -Append C:\Squid\etc\squid\squid.conf
+          'auth_param basic realm proxy' | Out-File -Append C:\Squid\etc\squid\squid.conf
+          'acl authenticated proxy_auth REQUIRED' | Out-File -Append C:\Squid\etc\squid\squid.conf
+          'http_access allow authenticated' | Out-File -Append C:\Squid\etc\squid\squid.conf
+          'access_log C:\Squid\var\log\squid\access.log combined' | Out-File -Append C:\Squid\etc\squid\squid.conf
+          "$env:PROXY_USER:$bcryptHash" | Out-File C:\Squid\etc\squid\users.htpasswd
+          Start-Service squidsrv
+        shell: powershell
         
       - name: Run Pester Tests for PowerShell Desktop
         run: |
