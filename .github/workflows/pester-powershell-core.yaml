@@ -78,10 +78,6 @@ jobs:
           sudo lsof -iTCP -sTCP:LISTEN -n -P
         shell: bash
         
-      - name: Setup tmate session
-        if: runner.os == 'macOS'
-        uses: mxschmitt/action-tmate@v3
-        
       - name: Run Pester Tests for PowerShell Core
         run: |
           Set-PSRepository psgallery -InstallationPolicy trusted
@@ -100,3 +96,9 @@ jobs:
         run: |
           Get-Content C:\Squid\var\log\squid\access.log
         shell: pwsh
+        
+      - name: Get Squid Access Log (MacOS)
+        if: runner.os == 'macOS'
+        run: |
+          cat /usr/local/etc/access.log
+        shell: bash
