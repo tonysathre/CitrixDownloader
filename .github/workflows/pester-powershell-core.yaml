@@ -11,10 +11,11 @@ jobs:
         os: [ubuntu-latest, windows-latest, macOS-latest]
     runs-on: ${{ matrix.os }}
     env:
-      CITRIX_USERNAME: ${{ secrets.CITRIX_USERNAME }}
-      CITRIX_PASSWORD: ${{ secrets.CITRIX_PASSWORD }}
-      PROXY_USERNAME:  ${{ secrets.PROXY_USERNAME }}
-      PROXY_PASSWORD:  ${{ secrets.PROXY_PASSWORD }}
+      CITRIXUSERNAME: ${{ secrets.CITRIXUSERNAME }}
+      CITRIXPASSWORD: ${{ secrets.CITRIXPASSWORD }}
+      PROXY_USER:     ${{ secrets.PROXY_USER }}
+      PROXY_PASSWORD: ${{ secrets.PROXY_PASSWORD }}
+      DEBUG:          ${{ 'false' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -23,28 +24,58 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update 
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install squid -y
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install squid apache2-utils -y
           sudo touch /etc/squid/htpasswd
-          sudo chmod o+r /etc/squid/htpasswd
-          sudo -u proxy printf "$PROXY_USERNAME:$(openssl passwd -crypt $PROXY_PASSWORD)\n" >> /etc/squid/htpasswd
-          sudo echo 'auth_param basic program /usr/lib/squid3/basic_ncsa_auth /etc/squid/htpasswd' >> /etc/squid/squid.conf
-          sudo echo 'auth_param basic realm proxy' >> /etc/squid/squid.conf
-          sudo echo 'acl authenticated proxy_auth REQUIRED' >> /etc/squid/squid.conf
-          sudo echo 'http_access allow authenticated' >> /etc/squid/squid.conf
+          sudo touch /var/log/squid/access.log
+          sudo chown proxy:proxy /var/log/squid/access.log
+          sudo chown proxy:proxy /etc/squid/htpasswd
+          sudo chown proxy:proxy /etc/squid/squid.conf
+          sudo -u proxy chmod 777 /etc/squid/squid.conf
+          sudo -u proxy chmod 777 /var/log/squid/access.log
+          sudo -u proxy htpasswd -b /etc/squid/htpasswd $PROXY_USER $PROXY_PASSWORD
+          sudo -u proxy echo 'auth_param basic program /usr/lib/squid3/basic_ncsa_auth /etc/squid/htpasswd' >> /etc/squid/squid.conf
+          sudo -u proxy echo 'auth_param basic realm proxy' >> /etc/squid/squid.conf
+          sudo -u proxy echo 'acl authenticated proxy_auth REQUIRED' >> /etc/squid/squid.conf
+          sudo -u proxy echo 'http_access allow authenticated' >> /etc/squid/squid.conf
+          sudo sed -i -e 's/# access_log daemon/access_log daemon/' /etc/squid/squid.conf
           sudo service squid start
-          sudo curl --verbose --proxy http://$PROXY_USERNAME:$PROXY_PASSWORD@localhost:3128 https://www.google.com
         shell: bash
       
       - name: Setup Squid Proxy Server (Windows)
         if: runner.os == 'Windows'
         run: |
-          choco install squid
-        shell: powershell
+          choco install squid --no-progress
+          $ProgressPreference = 'SilentlyContinue'
+          Invoke-WebRequest -Uri https://chilkatdownload.com/9.5.0.89/chilkatdotnet48-9.5.0-x64.zip -OutFile $env:TEMP\chilkatdotnet48-9.5.0-x64.zip
+          Expand-Archive $env:TEMP\chilkatdotnet48-9.5.0-x64.zip -DestinationPath $env:TEMP\ -Force
+          Add-Type -Path "$env:TEMP\chilkatdotnet48-9.5.0-x64\ChilkatDotNet48.dll"
+          $crypt = New-Object Chilkat.Crypt2
+          $bcryptHash = $crypt.BCryptHash($env:PROXY_PASSWORD)
+          New-Item -Type File C:\Squid\etc\squid\users.htpasswd
+          'auth_param basic program /lib/squid/basic_ncsa_auth.exe C:\Squid\etc\squid\users.htpasswd' | Out-File -Append C:\Squid\etc\squid\squid.conf
+          'auth_param basic realm proxy' | Out-File -Append C:\Squid\etc\squid\squid.conf
+          'acl authenticated proxy_auth REQUIRED' | Out-File -Append C:\Squid\etc\squid\squid.conf
+          'http_access allow authenticated' | Out-File -Append C:\Squid\etc\squid\squid.conf
+          'access_log C:\Squid\var\log\squid\access.log combined' | Out-File -Append C:\Squid\etc\squid\squid.conf
+          "$env:PROXY_USER:$bcryptHash" | Out-File C:\Squid\etc\squid\users.htpasswd
+          Start-Service squidsrv
+        shell: pwsh
 
       - name: Setup Squid Proxy Server (MacOS)
         if: runner.os == 'macOS'
         run: |
           brew install squid
+          sudo touch /usr/local/etc/htpasswd
+          sudo touch /usr/local/etc/access.log
+          sudo htpasswd -b /usr/local/etc/htpasswd $PROXY_USER $PROXY_PASSWORD
+          sudo echo 'auth_param basic program /usr/local/Cellar/squid/4.17/libexec/basic_ncsa_auth /usr/local/etc/htpasswd' >> /usr/local/etc/squid.conf
+          sudo echo 'auth_param basic realm proxy' >> /usr/local/etc/squid.conf
+          sudo echo 'acl authenticated proxy_auth REQUIRED' >> /usr/local/etc/squid.conf
+          sudo echo 'http_access allow authenticated' >> /usr/local/etc/squid.conf
+          # enabling the access_log causes squid to fail to start for some reason
+          #sudo echo 'access_log stdio:/usr/local/etc/access.log squid' >> /usr/local/etc/squid.conf
+          sudo sed -i '' '/http_access deny all/d' /usr/local/etc/squid.conf
+          brew services start squid
         shell: bash
         
       - name: Run Pester Tests for PowerShell Core
@@ -53,3 +84,28 @@ jobs:
           Install-Module -Name Pester -RequiredVersion 5.3.1 -Confirm:$false -Force
           Invoke-Pester -Path .\tests\ -Output Diagnostic
         shell: pwsh
+
+      - name: Get Squid Access Log (Linux)
+        if: |
+          runner.os == 'Linux' && env.DEBUG == 'true'
+        run: |
+          cat /var/log/squid/access.log
+        shell: bash
+        
+      - name: Get Squid Access Log (Windows)
+        if: |
+          runner.os == 'Windows' && env.DEBUG == 'true'
+        run: |
+          Get-Content C:\Squid\var\log\squid\access.log
+        shell: pwsh
+        
+      - name: Get Squid Access Log (MacOS)
+        if: |
+          runner.os == 'macOS' && env.DEBUG == 'true'
+        run: |
+          cat /usr/local/etc/access.log
+        shell: bash
+
+      - name: Setup tmate session
+        if: env.DEBUG == 'true'
+        uses: mxschmitt/action-tmate@v3
