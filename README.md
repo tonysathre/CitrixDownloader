@@ -1,3 +1,5 @@
+[![PowerShell Core Tests](https://github.com/tonysathre/CitrixDownloader/actions/workflows/pester-powershell-core.yaml/badge.svg)](https://github.com/tonysathre/CitrixDownloader/actions/workflows/pester-powershell-core.yaml)
+
 # CitrixDownloader
 PowerShell script to automate the download of binaries from Citrix.com.
 
