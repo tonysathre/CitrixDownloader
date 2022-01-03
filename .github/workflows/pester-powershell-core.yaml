@@ -15,6 +15,7 @@ jobs:
       CITRIXPASSWORD: ${{ secrets.CITRIXPASSWORD }}
       PROXY_USER:     ${{ secrets.PROXY_USER }}
       PROXY_PASSWORD: ${{ secrets.PROXY_PASSWORD }}
+      DEBUG:          ${{ 'true' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -71,12 +72,10 @@ jobs:
           sudo echo 'auth_param basic realm proxy' >> /usr/local/etc/squid.conf
           sudo echo 'acl authenticated proxy_auth REQUIRED' >> /usr/local/etc/squid.conf
           sudo echo 'http_access allow authenticated' >> /usr/local/etc/squid.conf
-          sudo echo 'access_log /usr/local/etc/access.log squid' >> /usr/local/etc/squid.conf
+          # enabling the access_log causes squid to fail to start for some reason
+          #sudo echo 'access_log stdio:/usr/local/etc/access.log squid' >> /usr/local/etc/squid.conf
           sudo sed -i '' '/http_access deny all/d' /usr/local/etc/squid.conf
-          cat /usr/local/etc/squid.conf
           brew services start squid
-          brew services list
-          sudo lsof -iTCP -sTCP:LISTEN -n -P
         shell: bash
         
       - name: Run Pester Tests for PowerShell Core
@@ -87,19 +86,26 @@ jobs:
         shell: pwsh
 
       - name: Get Squid Access Log (Linux)
-        if: runner.os == 'Linux'
+        if: |
+          runner.os == 'Linux' && env.DEBUG == 'true'
         run: |
           cat /var/log/squid/access.log
         shell: bash
         
       - name: Get Squid Access Log (Windows)
-        if: runner.os == 'Windows'
+        if: |
+          runner.os == 'Windows' && env.DEBUG == 'true'
         run: |
           Get-Content C:\Squid\var\log\squid\access.log
         shell: pwsh
         
       - name: Get Squid Access Log (MacOS)
-        if: runner.os == 'macOS'
+        if: |
+          runner.os == 'macOS' && env.DEBUG == 'true'
         run: |
           cat /usr/local/etc/access.log
         shell: bash
+
+      - name: Setup tmate session
+        if: env.DEBUG == 'true'
+        uses: mxschmitt/action-tmate@v3
