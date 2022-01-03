@@ -44,7 +44,7 @@ jobs:
       - name: Setup Squid Proxy Server (Windows)
         if: runner.os == 'Windows'
         run: |
-          choco install squid
+          choco --no-progress install squid
           $ProgressPreference = 'SilentlyContinue'
           Invoke-WebRequest -Uri https://chilkatdownload.com/9.5.0.89/chilkatdotnet48-9.5.0-x64.zip -OutFile $env:TEMP\chilkatdotnet48-9.5.0-x64.zip
           Expand-Archive $env:TEMP\chilkatdotnet48-9.5.0-x64.zip -DestinationPath $env:TEMP\ -Force
