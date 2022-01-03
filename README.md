@@ -10,8 +10,7 @@ Credit to [Ryan Butler](https://github.com/ryancbutler) for the [original code](
 ## Requirements
 * PowerShell 3+ or PowerShell Core 7+
   * Only tested on PowerShell Core 7.2.1 but older versions may work
-* Windows or Linux
-  * MacOS probably works but I don't have a Mac to test it
+* Supports Windows, MacOS, and Linux
 
 ## Getting DLNumber and FileName
 
