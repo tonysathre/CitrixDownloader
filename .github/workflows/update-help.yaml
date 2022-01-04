@@ -16,7 +16,8 @@ jobs:
         '## Help' > HELP.md
         '```' >> HELP.md
         $Help = Get-Help .\Get-CTXBinary.ps1 -Full
-        $Help | ForEach-Object { $_.Replace('/home/runner/work/CitrixDownloader/CitrixDownloader/', '') } >> HELP.md
+        $Help.Name = Get-CTXBinary.ps1
+        $Help >> HELP.md
         '```' >> HELP.md
       shell: pwsh
       
