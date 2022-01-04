@@ -1,0 +1,21 @@
+name: Update Help docs
+
+on:
+  [push, pull_request]
+
+jobs:
+  update-help:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Update Help docs
+      run: |
+        '## Help' > HELP.md
+        '```' >> HELP.md
+        Get-Help .\Get-CTXBinary.ps1 -Full >> HELP.md
+        '```' >> HELP.md
+      shell: pwsh
+
