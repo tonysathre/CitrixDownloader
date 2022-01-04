@@ -2,7 +2,7 @@
 ```
 
 NAME
-    /home/runner/work/CitrixDownloader/CitrixDownloader/Get-CTXBinary.ps1
+    Get-CTXBinary.ps1
     
 SYNOPSIS
     Downloads a binary from Citrix.com
