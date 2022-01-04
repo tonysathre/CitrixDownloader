@@ -23,5 +23,5 @@ jobs:
       run: |
         git config --global user.name "bot.github.actions"
         git add ./HELP.md
-        git commit -m "[BOT] updated help doc"
+        git diff --staged --quiet || git commit -m "[BOT] updated help doc"
         git push
