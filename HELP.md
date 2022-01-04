@@ -2,16 +2,16 @@
 ```
 
 NAME
-    Get-CTXBinary.ps1
+    Get-CTXBinary
     
 SYNOPSIS
     Downloads a binary from Citrix.com
     
     
 SYNTAX
-    Get-CTXBinary.ps1 -DLNumber <Int32[]> -FileName <String[]> -Name <String[]> -OutputFolder <String> -CitrixUserName <String> -CitrixPassword <String> [-Proxy <Uri>] [-ProxyUseDefaultCredentials] [<CommonParameters>]
+    Get-CTXBinary -DLNumber <Int32[]> -FileName <String[]> -Name <String[]> -OutputFolder <String> -CitrixUserName <String> -CitrixPassword <String> [-Proxy <Uri>] [-ProxyUseDefaultCredentials] [<CommonParameters>]
     
-    Get-CTXBinary.ps1 -DLNumber <Int32[]> -FileName <String[]> -Name <String[]> -OutputFolder <String> -CitrixUserName <String> -CitrixPassword <String> [-Proxy <Uri>] [-ProxyCredential <PSCredential>] [<CommonParameters>]
+    Get-CTXBinary -DLNumber <Int32[]> -FileName <String[]> -Name <String[]> -OutputFolder <String> -CitrixUserName <String> -CitrixPassword <String> [-Proxy <Uri>] [-ProxyCredential <PSCredential>] [<CommonParameters>]
     
     
 DESCRIPTION
