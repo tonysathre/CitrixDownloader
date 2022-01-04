@@ -20,7 +20,7 @@ jobs:
       shell: pwsh
       
     - name: Commit Changes
-      uses: stefanzweifel/git-auto-commit-action@v4
+      uses: stefanzweifel/git-auto-commit-action@v4.1.2
       with:
         commit_message: "[Bot] Updated help doc"
         commit_user_name: Tony Sathre
