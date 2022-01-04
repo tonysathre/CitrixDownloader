@@ -18,7 +18,7 @@ jobs:
         $Help = Get-Help .\Get-CTXBinary.ps1 -Full
         $Help.Name = 'Get-CTXBinary.ps1'
         $Help.Details.Name = 'Get-CTXBinary.ps1'
-        $Help.syntax.syntaxItem.name = 'Get-CTXBinary.ps1'
+        $Help.syntax.syntaxItem | ForEach-Object { $_.name = 'Get-CTXBinary.ps1' }
         $Help >> HELP.md
         '```' >> HELP.md
       shell: pwsh
