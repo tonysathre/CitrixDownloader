@@ -28,7 +28,7 @@
   $ProxyCredential = Get-Credential Domain\UserName
   Get-CTXBinary -DLNumber 19427 -CitrixUserName mycitrixusername -CitrixPassword mycitrixpassword -OutputFolder C:\temp -Proxy http://proxy.domain.com:8080 -ProxyCredential $ProxyCredential
 .EXAMPLE
-  Get-CTXBinary.ps1 -DLNumber @(19427,20209) -OutputFolder C:\temp -CitrixUserName asathre688 -CitrixPassword $CitrixPassword -FileName @('VDAWorkstationSetup_1912.exe','Workspace-Environment-Management-v-2112-01-00-01.zip') -Name @('Single-session OS Virtual Delivery Agent 1912 LTSR CU3', 'Workspace Environment Management 2112')
+  Get-CTXBinary.ps1 -DLNumber @(19427,20209) -OutputFolder C:\temp -CitrixUserName mycitrixusername -CitrixPassword $CitrixPassword -FileName @('VDAWorkstationSetup_1912.exe','Workspace-Environment-Management-v-2112-01-00-01.zip') -Name @('Single-session OS Virtual Delivery Agent 1912 LTSR CU3', 'Workspace Environment Management 2112')
   
   Download multiple files at once
 .LINK
