@@ -9,7 +9,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
 
     - name: Update Help docs
       run: |
@@ -20,9 +20,8 @@ jobs:
       shell: pwsh
       
     - name: Commit Changes
-      uses: stefanzweifel/git-auto-commit-action@v4.1.2
-      with:
-        commit_message: "[Bot] Updated help doc"
-        commit_user_name: Tony Sathre
-        commit_user_email: tony@ghostbit.org
-        commit_author: Tony Sathre <tony@ghostbit.org>
+      run: |
+        git config --global user.name "bot.github.actions"
+        git add ./HELP.md
+        git commit -m "updated help doc"
+        git push
