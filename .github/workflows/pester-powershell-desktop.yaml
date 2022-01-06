@@ -9,9 +9,9 @@ jobs:
     env:
       CITRIX_USERNAME: ${{ secrets.CITRIX_USERNAME }}
       CITRIX_PASSWORD: ${{ secrets.CITRIX_PASSWORD }}
-      PROXY_USERNAME:     ${{ secrets.PROXY_USERNAME }}
-      PROXY_PASSWORD: ${{ secrets.PROXY_PASSWORD }}
-      DEBUG:          ${{ 'false' }}
+      PROXY_USERNAME:  ${{ secrets.PROXY_USERNAME }}
+      PROXY_PASSWORD:  ${{ secrets.PROXY_PASSWORD }}
+      DEBUG:           ${{ 'false' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v1
